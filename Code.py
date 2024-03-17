@@ -31,14 +31,14 @@ model_choice = st.selectbox('Choose a machine learning model:', ['Neural Network
 
 # Data preprocessing
 def preprocess_data(data):
-    features = ['make', 'model', 'year', 'mileage', 'engV', 'engType', 'body', 'drive']
+    features = ['car', 'model', 'year', 'mileage', 'engV', 'engType', 'body', 'drive']
     target = 'price'
 
     X = data[features]
     y = data[target]
 
     numerical_features = ['year', 'mileage', 'engV']
-    categorical_features = ['make', 'model', 'engType', 'body', 'drive']
+    categorical_features = ['car', 'model', 'engType', 'body', 'drive']
 
     numerical_transformer = Pipeline(steps=[
         ('imputer', SimpleImputer(strategy='median')),
