@@ -100,4 +100,16 @@ if st.checkbox('Predict Your Car’s Price'):
     user_data['mileage'] = st.number_input('Mileage', min_value=0)
     user_data['engV'] = st.number_input('Engine Volume', min_value=0.0, step=0.1)
     user_data['engType'] = st.selectbox('Engine Type', df['engType'].unique())
-    user_data['body'] = st.selectbox('Body
+    user_data['body'] = st.selectbox('Body Type', df['body'].unique())
+    user_data['drive'] = st.selectbox('Drive Type', df['drive'].dropna().unique())
+    
+    user_features = pd.DataFrame([user_data])
+    
+    if st.button('Predict Price'):
+        if st.session_state.model_trained:
+            # Ensure preprocessor is included in the trained pipeline
+            user_features_preprocessed = st.session_state.model.named_steps['preprocessor'].transform(user_features)
+            predicted_price = st.session_state.model.predict(user_features_preprocessed)
+            st.write(f"Estimated Price: ${predicted_price[0]:,.2f}")
+        else:
+            st.error("Please train the model before predicting.")
