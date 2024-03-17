@@ -13,14 +13,15 @@ from sklearn.metrics import r2_score
 # Function to load and preprocess the dataset
 @st.cache  # This function will cache the data so it only loads once
 def load_data(filepath):
-    df = pd.read_csv(filepath)
+    # Specify encoding to avoid 'utf-8' codec errors
+    df = pd.read_csv(filepath, encoding='ISO-8859-1')  # Adjust encoding if necessary
     df = df[df['price'] > 0]
     df.dropna(subset=['price', 'year', 'mileage'], inplace=True)
     df['year'] = pd.to_numeric(df['year'], errors='coerce')
     df.dropna(subset=['year'], inplace=True)
     return df
 
-# Path to your dataset
+# Load your dataset
 file_path = 'car_sales_us.csv'  # Replace with your file path
 df = load_data(file_path)
 
@@ -30,14 +31,14 @@ model_choice = st.selectbox('Choose a machine learning model:', ['Neural Network
 
 # Data preprocessing
 def preprocess_data(data):
-    features = ['make', 'model', 'year', 'mileage', 'engV', 'engType', 'body', 'drive']  # Adjust based on your dataset
+    features = ['make', 'model', 'year', 'mileage', 'engV', 'engType', 'body', 'drive']
     target = 'price'
 
     X = data[features]
     y = data[target]
 
-    numerical_features = ['year', 'mileage', 'engV']  # Adjust based on your dataset
-    categorical_features = ['make', 'model', 'engType', 'body', 'drive']  # Adjust based on your dataset
+    numerical_features = ['year', 'mileage', 'engV']
+    categorical_features = ['make', 'model', 'engType', 'body', 'drive']
 
     numerical_transformer = Pipeline(steps=[
         ('imputer', SimpleImputer(strategy='median')),
