@@ -92,24 +92,39 @@ if st.button('Train and Evaluate Selected Model'):
 
 # User Input Prediction with dynamic model selection based on make
 if st.checkbox('Predict Your Car’s Price'):
+    # Initialize an empty dictionary to hold user inputs
     user_data = {}
+    
+    # Allow the user to select car make, model, year, and mileage
     user_data['car'] = st.selectbox('Car Make', df['car'].unique())
+    
+    # Update car models based on selected make
     filtered_models = df[df['car'] == user_data['car']]['model'].unique()
     user_data['model'] = st.selectbox('Car Model', filtered_models)
+    
+    # User selects year and mileage
     user_data['year'] = st.slider('Year', int(df['year'].min()), int(df['year'].max()), step=1)
     user_data['mileage'] = st.number_input('Mileage', min_value=0)
-    user_data['engV'] = st.number_input('Engine Volume', min_value=0.0, step=0.1)
-    user_data['engType'] = st.selectbox('Engine Type', df['engType'].unique())
-    user_data['body'] = st.selectbox('Body Type', df['body'].unique())
-    user_data['drive'] = st.selectbox('Drive Type', df['drive'].dropna().unique())
-    
+
+    # Transform user input into dataframe, ensuring it matches the training data structure
     user_features = pd.DataFrame([user_data])
     
+    # Ensure correct columns for input, even if not all are used for prediction
+    # Adjust this template to match your training data
+    input_template = pd.DataFrame(columns=['car', 'model', 'year', 'mileage', 'engV', 'engType', 'body', 'drive'])
+    for column in input_template.columns:
+        if column in user_features:
+            input_template[column] = user_features[column]
+        else:
+            # Assign a default value or a placeholder for missing columns
+            input_template[column] = 0 if input_template[column].dtype != 'O' else 'unknown'
+    
+    # Make prediction if model is trained and button is clicked
     if st.button('Predict Price'):
         if st.session_state.model_trained:
-            # Ensure preprocessor is included in the trained pipeline
-            user_features_preprocessed = st.session_state.model.named_steps['preprocessor'].transform(user_features)
-            predicted_price = st.session_state.model.predict(user_features_preprocessed)
+            # Use the full pipeline from the session state to make predictions
+            predicted_price = st.session_state.model.predict(input_template)
             st.write(f"Estimated Price: ${predicted_price[0]:,.2f}")
         else:
             st.error("Please train the model before predicting.")
+
