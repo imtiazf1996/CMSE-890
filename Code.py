@@ -21,7 +21,7 @@ def load_data(filepath):
     return df
 
 # Path to your dataset
-file_path = 'your_dataset_path_here.csv'  # Replace with your file path
+file_path = 'car_sales_us.csv'  # Replace with your file path
 df = load_data(file_path)
 
 # Streamlit user interface
