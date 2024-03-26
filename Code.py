@@ -110,7 +110,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 st.header('Model Selection and Training')
 model_choice = st.selectbox(
     'Select a machine learning model:',
-    ['Neural Network (MLPRegressor)', 'Support Vector Machine (SVR)', 'Linear Regression']
+    ['Neural Network (MLPRegressor)', 'Support Vector Machine (SVR)', 'Linear Regression', 'Random Forest']
 )
 
 # Display model-specific hyperparameter options
