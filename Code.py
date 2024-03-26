@@ -117,6 +117,11 @@ model_choice = st.selectbox(
 if model_choice == 'Neural Network (MLPRegressor)':
     layer_sizes = st.text_input('Enter hidden layer sizes (e.g., 100,50)', '100,50')
     max_iter = st.slider('Max iterations', min_value=100, max_value=1000, value=500, step=50)
+
+elif model_choice == 'Random Forest':
+    n_estimators = st.slider('Number of trees', min_value=10, max_value=300, value=100, step=10)
+    max_depth = st.slider('Maximum depth of the trees', min_value=1, max_value=50, value=5, step=1)
+
 elif model_choice == 'Support Vector Machine (SVR)':
     C = st.slider('C (Regularization parameter)', min_value=0.01, max_value=10.0, value=1.0, step=0.01)
     kernel = st.selectbox('Kernel', ['linear', 'poly', 'rbf', 'sigmoid'])
@@ -130,6 +135,12 @@ if st.button('Train and Evaluate Model'):
             ('regressor', MLPRegressor(hidden_layer_sizes=tuple(map(int, layer_sizes.split(','))), 
                                        max_iter=max_iter, random_state=42))
         ])
+    elif model_choice == 'Random Forest':
+    model = Pipeline(steps=[
+        ('preprocessor', preprocessor),
+        ('regressor', RandomForestRegressor(n_estimators=n_estimators, max_depth=max_depth, random_state=42))
+    ])
+
     elif model_choice == 'Support Vector Machine (SVR)':
         model = Pipeline(steps=[
             ('preprocessor', preprocessor),
@@ -140,7 +151,11 @@ if st.button('Train and Evaluate Model'):
             ('preprocessor', preprocessor),
             ('regressor', LinearRegression())
         ])
-    
+
+    # Cross-validation
+    scores = cross_val_score(model, X, y, cv=5, scoring='r2')
+    st.write(f"Average R² score from cross-validation: {np.mean(scores):.3f} ± {np.std(scores):.3f}")
+
     # Train the model
     model.fit(X_train, y_train)
     
@@ -164,4 +179,42 @@ if st.button('Train and Evaluate Model'):
     plt.title('Actual Prices vs Predicted Prices')
     plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', linestyle='--')  # Diagonal line for reference
     st.pyplot(plt)
+    if model_choice == 'Random Forest':
+        importances = model.named_steps['regressor'].feature_importances_
+        # Adapt below if preprocessing changes feature names
+        feature_names = preprocessor.transformers_[0][-1] + list(preprocessor.named_transformers_['cat'].get_feature_names())
+        forest_importances = pd.Series(importances, index=feature_names)
+        fig, ax = plt.subplots()
+        forest_importances.plot.bar(ax=ax)
+        ax.set_title("Feature importances")
+        ax.set_ylabel("Mean decrease in impurity")
+        st.pyplot(fig)
 
+    # Feature importance (for models that support it)
+    if model_choice == 'Random Forest':
+        importances = model.named_steps['regressor'].feature_importances_
+        # Adapt below if preprocessing changes feature names
+        feature_names = preprocessor.transformers_[0][-1] + list(preprocessor.named_transformers_['cat'].get_feature_names())
+        forest_importances = pd.Series(importances, index=feature_names)
+        fig, ax = plt.subplots()
+        forest_importances.plot.bar(ax=ax)
+        ax.set_title("Feature importances")
+        ax.set_ylabel("Mean decrease in impurity")
+        st.pyplot(fig)
+
+# Predict New Data section
+st.header("Predict New Data")
+# Dynamically create input fields based on the features
+input_data = {}
+for feature in features:
+    if feature in numerical_features:
+        input_data[feature] = st.number_input(f"Enter {feature}", float(df[feature].min()), float(df[feature].max()), float(df[feature].mean()))
+    else:  # Assuming categorical
+        input_data[feature] = st.selectbox(f"Select {feature}", options=df[feature].unique())
+
+# Button to make prediction
+if st.button('Predict Price'):
+    input_df = pd.DataFrame([input_data])
+    input_preprocessed = preprocessor.transform(input_df)
+    prediction = st.session_state.model.predict(input_preprocessed)
+    st.write(f"Predicted Price: ${prediction[0]:,.2f}")
