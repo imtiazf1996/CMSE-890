@@ -219,14 +219,16 @@ if selected_make:
 
 # Mileage input
 input_data['Mileage'] = st.number_input('Enter Mileage', min_value=0, max_value=400000, value=50000, step=1000)
-
-for col in numerical_features:
-    input_df[col] = pd.to_numeric(input_df[col], errors='coerce')
     
 input_df.fillna(method='ffill', inplace=True)
 
 expected_columns = ['Year', 'Mileage', 'Make', 'Model']  # Add all expected columns
 input_df = input_df.reindex(columns=expected_columns)
+
+for col in numerical_features:
+    input_df[col] = pd.to_numeric(input_df[col], errors='coerce')
+    
+input_df.fillna(method='ffill', inplace=True)
 
 # Button to make prediction
 if st.button('Predict Price'):
