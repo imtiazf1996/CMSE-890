@@ -99,9 +99,9 @@ def preprocess_data(data):
             ('num', numerical_transformer, numerical_features),
             ('cat', categorical_transformer, categorical_features)])
 
-    return preprocessor, X, y, features
+    return preprocessor, X, y, features, numerical_features,categorical_features
 
-preprocessor, X, y, features = preprocess_data(df)
+preprocessor, X, y, features, numerical_features,categorical_features = preprocess_data(df)
 
 # Splitting the dataset
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
