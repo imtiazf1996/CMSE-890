@@ -221,6 +221,14 @@ input_data['Mileage'] = st.number_input('Enter Mileage', min_value=0, max_value=
 
 # Button to make prediction
 if st.button('Predict Price'):
+    if st.session_state.get('model_trained', False):
+        model = st.session_state.model  # This should include the fitted 'preprocessor'
+        input_df = pd.DataFrame([input_data])
+        # Now use 'model' to predict since it contains the fitted 'preprocessor'
+        prediction = model.predict(input_df)  # This uses the entire pipeline, ensuring preprocessing is applied
+        st.write(f"Predicted Price: ${prediction[0]:,.2f}")
+    else:
+        st.error("Please train the model before predicting.")
     # Ensure the input data matches the expected feature order and types
     input_df = pd.DataFrame([input_data])
     input_preprocessed = preprocessor.transform(input_df)
