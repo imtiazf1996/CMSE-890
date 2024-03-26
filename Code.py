@@ -152,10 +152,6 @@ if st.button('Train and Evaluate Model'):
             ('regressor', LinearRegression())
         ])
 
-    # Cross-validation
-    scores = cross_val_score(model, X, y, cv=5, scoring='r2')
-    st.write(f"Average R² score from cross-validation: {np.mean(scores):.3f} ± {np.std(scores):.3f}")
-
     # Train the model
     model.fit(X_train, y_train)
     
