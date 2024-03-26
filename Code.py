@@ -24,9 +24,10 @@ if 'model_trained' not in st.session_state:
 def load_data(filepath):
     df = pd.read_csv(filepath, encoding='ISO-8859-1')
     # Remove rows where 'price' or 'mileage' is zero or missing
-    df = df[(df['pricesold'] > 0) & (df['Mileage'] > 0)]
+    df = df[(df['pricesold'] > 0) & (df['Mileage'] > 0) & (df['Mileage'] <= 400000)]
     # Convert 'year' to numeric and adjust 'mileage' and 'price'
     df['Year'] = pd.to_numeric(df['Year'], errors='coerce')
+    df = df[df['Mileage'] <= 400000]
     # Drop any remaining rows with missing values
     df.dropna(subset=['pricesold', 'Year', 'Mileage'], inplace=True)
     return df
