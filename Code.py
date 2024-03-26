@@ -2,7 +2,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.preprocessing import StandardScaler, OneHotEncoder, PolynomialFeatures
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
@@ -10,6 +10,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LinearRegression, Ridge
 from sklearn.neural_network import MLPRegressor
 from sklearn.svm import SVR
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, r2_score
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -213,8 +214,8 @@ selected_make = st.selectbox('Select Make', options=unique_makes)
 
 # Model selection based on selected Make
 if selected_make:
-    unique_models = df[df['Make'] == selected_make]['Model'].unique()
-    input_data['Model'] = st.selectbox('Select Model', options=unique_models)
+    input_data['Make'] = df[df['Make'] == selected_make]['Model'].unique()
+    input_data['Model'] = st.selectbox('Select Model', options=input_data['Make'])
 
 # Mileage input
 input_data['Mileage'] = st.number_input('Enter Mileage', min_value=0, max_value=400000, value=50000, step=1000)
