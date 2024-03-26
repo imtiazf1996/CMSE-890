@@ -160,7 +160,7 @@ if st.button('Train and Evaluate Model'):
     
     # Plotting actual vs predicted prices for evaluation
     plt.figure(figsize=(10, 6))
-    sns.scatterplot(y_test, y_pred)
+    sns.scatterplot(x=y_test, y=y_pred)
     plt.xlabel('Actual Prices')
     plt.ylabel('Predicted Prices')
     plt.title('Actual Prices vs Predicted Prices')
