@@ -77,14 +77,14 @@ elif plot_choice == 'Price vs. Mileage':
 
 # Data preprocessing
 def preprocess_data(data):
-    features = ['year', 'mileage', 'make', 'model']  # Modify as per your dataset
+    features = ['year', 'mileage', 'car', 'model']  # Modify as per your dataset
     target = 'price'
 
     X = data[features]
     y = data[target]
 
     numerical_features = ['year', 'mileage']
-    categorical_features = ['make', 'model']  # Modify as per your dataset
+    categorical_features = ['car', 'model']  # Modify as per your dataset
 
     numerical_transformer = Pipeline(steps=[
         ('imputer', SimpleImputer(strategy='median')),
@@ -144,7 +144,7 @@ if st.button('Train and Evaluate Model'):
     # Train the model
     model.fit(X_train, y_train)
     
-    # Make predictions and evaluate
+    # car predictions and evaluate
     y_pred = model.predict(X_test)
     r2 = r2_score(y_test, y_pred)
     
