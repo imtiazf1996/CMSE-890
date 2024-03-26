@@ -21,7 +21,7 @@ if 'model_trained' not in st.session_state:
     st.session_state.model = None
 
 # Function to load and preprocess the dataset
-@st.cache
+@st.experimental_memo
 def load_data(filepath):
     df = pd.read_csv(filepath, encoding='ISO-8859-1')
     # Remove rows where 'price' or 'mileage' is zero or missing
@@ -219,6 +219,14 @@ if selected_make:
 
 # Mileage input
 input_data['Mileage'] = st.number_input('Enter Mileage', min_value=0, max_value=400000, value=50000, step=1000)
+
+for col in numerical_features:
+    input_df[col] = pd.to_numeric(input_df[col], errors='coerce')
+    
+input_df.fillna(method='ffill', inplace=True)
+
+expected_columns = ['Year', 'Mileage', 'Make', 'Model']  # Add all expected columns
+input_df = input_df.reindex(columns=expected_columns)
 
 # Button to make prediction
 if st.button('Predict Price'):
