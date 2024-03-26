@@ -198,18 +198,30 @@ if st.button('Train and Evaluate Model'):
         ax.set_ylabel("Mean decrease in impurity")
         st.pyplot(fig)
 
-# Predict New Data section
-st.header("Predict New Data")
-# Dynamically create input fields based on the features
+# Adjust the 'Predict New Data' section to meet your requirements
+st.header("Predict New Car Prices")
+
+# Initialize an empty dictionary to hold user inputs
 input_data = {}
-for feature in features:
-    if feature in numerical_features:
-        input_data[feature] = st.number_input(f"Enter {feature}", float(df[feature].min()), float(df[feature].max()), float(df[feature].mean()))
-    else:  # Assuming categorical
-        input_data[feature] = st.selectbox(f"Select {feature}", options=df[feature].unique())
+
+# Year selection limited between 1980 and 2024
+input_data['Year'] = st.number_input('Enter Year', min_value=1980, max_value=2024, value=2020, step=1)
+
+# Make selection
+unique_makes = df['Make'].unique()
+selected_make = st.selectbox('Select Make', options=unique_makes)
+
+# Model selection based on selected Make
+if selected_make:
+    unique_models = df[df['Make'] == selected_make]['Model'].unique()
+    input_data['Model'] = st.selectbox('Select Model', options=unique_models)
+
+# Mileage input
+input_data['Mileage'] = st.number_input('Enter Mileage', min_value=0, max_value=400000, value=50000, step=1000)
 
 # Button to make prediction
 if st.button('Predict Price'):
+    # Ensure the input data matches the expected feature order and types
     input_df = pd.DataFrame([input_data])
     input_preprocessed = preprocessor.transform(input_df)
     prediction = st.session_state.model.predict(input_preprocessed)
