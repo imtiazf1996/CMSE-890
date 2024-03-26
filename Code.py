@@ -26,8 +26,7 @@ def load_data(filepath):
     # Remove rows where 'price' or 'mileage' is zero or missing
     df = df[(df['pricesold'] > 0) & (df['Mileage'] > 0) & (df['Mileage'] <= 400000)]
     # Convert 'year' to numeric and adjust 'mileage' and 'price'
-    df['Year'] = pd.to_numeric(df['Year'], errors='coerce')
-    df = df[df['Mileage'] <= 400000]
+    #df['Year'] = pd.to_numeric(df['Year'], errors='coerce')
     # Drop any remaining rows with missing values
     df.dropna(subset=['pricesold', 'Year', 'Mileage'], inplace=True)
     return df
