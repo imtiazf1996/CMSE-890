@@ -24,17 +24,15 @@ if 'model_trained' not in st.session_state:
 def load_data(filepath):
     df = pd.read_csv(filepath, encoding='ISO-8859-1')
     # Remove rows where 'price' or 'mileage' is zero or missing
-    df = df[(df['price'] > 0) & (df['mileage'] > 0)]
+    df = df[(df['pricesold'] > 0) & (df['Mileage'] > 0)]
     # Convert 'year' to numeric and adjust 'mileage' and 'price'
-    df['year'] = pd.to_numeric(df['year'], errors='coerce')
-    df['mileage'] = df['mileage'] / 2  # Convert mileage to miles
-    df['price'] = df['price'] * 500  # Convert price to USD
+    df['Year'] = pd.to_numeric(df['Year'], errors='coerce')
     # Drop any remaining rows with missing values
-    df.dropna(subset=['price', 'year', 'mileage'], inplace=True)
+    df.dropna(subset=['pricesold', 'Year', 'Mileage'], inplace=True)
     return df
 
 # Load your dataset
-file_path = 'car_sales_us.csv'  # Update with your file path
+file_path = 'used_car_sales.csv'  # Update with your file path
 df = load_data(file_path)
 
 # Streamlit user interface for EDA
@@ -46,7 +44,7 @@ plot_choice = st.selectbox(
 
 if plot_choice == 'Price Distribution':
     plt.figure(figsize=(8, 4))
-    sns.histplot(df['price'], bins=30, kde=True)
+    sns.histplot(df['pricesold'], bins=30, kde=True)
     plt.title('Distribution of Used Car Prices (USD)')
     plt.xlabel('Price (USD)')
     plt.ylabel('Frequency')
@@ -54,7 +52,7 @@ if plot_choice == 'Price Distribution':
 
 elif plot_choice == 'Mileage Distribution':
     plt.figure(figsize=(8, 4))
-    sns.histplot(df['mileage'], bins=30, kde=True)
+    sns.histplot(df['Mileage'], bins=30, kde=True)
     plt.title('Distribution of Car Mileage (miles)')
     plt.xlabel('Mileage (miles)')
     plt.ylabel('Frequency')
@@ -62,7 +60,7 @@ elif plot_choice == 'Mileage Distribution':
 
 elif plot_choice == 'Price vs. Year':
     plt.figure(figsize=(10, 6))
-    sns.scatterplot(x='year', y='price', data=df, alpha=0.6)
+    sns.scatterplot(x='Year', y='pricesold', data=df, alpha=0.6)
     plt.title('Price vs. Year')
     plt.xlabel('Year')
     plt.ylabel('Price (USD)')
@@ -70,7 +68,7 @@ elif plot_choice == 'Price vs. Year':
 
 elif plot_choice == 'Price vs. Mileage':
     plt.figure(figsize=(10, 6))
-    sns.scatterplot(x='mileage', y='price', data=df, alpha=0.6)
+    sns.scatterplot(x='Mileage', y='pricesold', data=df, alpha=0.6)
     plt.title('Price vs. Mileage')
     plt.xlabel('Mileage (miles)')
     plt.ylabel('Price (USD)')
@@ -79,14 +77,14 @@ elif plot_choice == 'Price vs. Mileage':
 
 # Data preprocessing
 def preprocess_data(data):
-    features = ['year', 'mileage', 'car', 'model']  # Modify as per your dataset
-    target = 'price'
+    features = ['Year', 'Mileage', 'Make', 'Model']  # Modify as per your dataset
+    target = 'pricesold'
 
     X = data[features]
     y = data[target]
 
-    numerical_features = ['year', 'mileage']
-    categorical_features = ['car', 'model']  # Modify as per your dataset
+    numerical_features = ['Year', 'Mileage']
+    categorical_features = ['Make', 'Model']  # Modify as per your dataset
 
     numerical_transformer = Pipeline(steps=[
         ('imputer', SimpleImputer(strategy='median')),
