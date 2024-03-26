@@ -136,10 +136,10 @@ if st.button('Train and Evaluate Model'):
                                        max_iter=max_iter, random_state=42))
         ])
     elif model_choice == 'Random Forest':
-    model = Pipeline(steps=[
-        ('preprocessor', preprocessor),
-        ('regressor', RandomForestRegressor(n_estimators=n_estimators, max_depth=max_depth, random_state=42))
-    ])
+        model = Pipeline(steps=[
+            ('preprocessor', preprocessor),
+            ('regressor', RandomForestRegressor(n_estimators=n_estimators, max_depth=max_depth, random_state=42))
+        ])
 
     elif model_choice == 'Support Vector Machine (SVR)':
         model = Pipeline(steps=[
