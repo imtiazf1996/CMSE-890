@@ -159,7 +159,7 @@ if st.button('Train and Evaluate Model'):
     
     # car predictions and evaluate
     y_pred = model.predict(X_test)
-    r2 = mean_squared_error(y_test, y_pred)
+    r2 = mean_squared_error(y_test, y_pred)**0.5
     
     # Display evaluation metrics and model information
     st.write(f'Model selected: {model_choice}')
