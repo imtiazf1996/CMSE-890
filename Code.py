@@ -222,9 +222,6 @@ input_data['Mileage'] = st.number_input('Enter Mileage', min_value=0, max_value=
 
 expected_columns = ['Year', 'Mileage', 'Make', 'Model']  # Add all expected columns
 input_df = input_data.reindex(columns=expected_columns)
-
-for col in numerical_features:
-    input_df[col] = pd.to_numeric(input_df[col], errors='coerce')
     
 input_df.fillna(method='ffill', inplace=True)
 
@@ -232,7 +229,6 @@ input_df.fillna(method='ffill', inplace=True)
 if st.button('Predict Price'):
     if st.session_state.get('model_trained', False):
         model = st.session_state.model  # This should include the fitted 'preprocessor'
-        #input_df = pd.DataFrame([input_data])
         # Now use 'model' to predict since it contains the fitted 'preprocessor'
         prediction = model.predict(input_df)  # This uses the entire pipeline, ensuring preprocessing is applied
         st.write(f"Predicted Price: ${prediction[0]:,.2f}")
