@@ -28,7 +28,7 @@ def load_data(filepath):
     df = df[(df['pricesold'] > 0) & (df['Mileage'] > 0) & (df['Mileage'] <= 400000) & (df['Year'] <= 2024) & (df['Year'] > 1980) & (df['pricesold'] < 100000)]
     # Convert 'year' to numeric and adjust 'mileage' and 'price'
     df['Year'] = pd.to_numeric(df['Year'], errors='coerce')
-    df = df[~df['model'].astype(str).str.contains('\$')]
+    df = df[~df['Model'].astype(str).str.contains('\$')]
     # Drop any remaining rows with missing values
     df.dropna(subset=['pricesold', 'Year', 'Mileage'], inplace=True)
     return df
