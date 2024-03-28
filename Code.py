@@ -191,18 +191,6 @@ if st.button('Train and Evaluate Model'):
         ax.set_ylabel("Mean decrease in impurity")
         st.pyplot(fig)
 
-    # Feature importance (for models that support it)
-    if model_choice == 'Random Forest':
-        importances = model.named_steps['regressor'].feature_importances_
-        # Adapt below if preprocessing changes feature names
-        feature_names = preprocessor.transformers_[0][-1] + list(preprocessor.named_transformers_['cat'].get_feature_names())
-        forest_importances = pd.Series(importances, index=feature_names)
-        fig, ax = plt.subplots()
-        forest_importances.plot.bar(ax=ax)
-        ax.set_title("Feature importances")
-        ax.set_ylabel("Mean decrease in impurity")
-        st.pyplot(fig)
-
 # Adjust the 'Predict New Data' section to meet your requirements
 st.header("Predict New Car Prices")
 
