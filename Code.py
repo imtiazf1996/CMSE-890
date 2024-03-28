@@ -11,7 +11,7 @@ from sklearn.linear_model import LinearRegression, Ridge
 from sklearn.neural_network import MLPRegressor
 from sklearn.svm import SVR
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.metrics import mean_squared_error, r2_score, mean_squared_error
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -159,7 +159,7 @@ if st.button('Train and Evaluate Model'):
     
     # car predictions and evaluate
     y_pred = model.predict(X_test)
-    r2 = r2_score(y_test, y_pred)
+    r2 = mean_squared_error(y_test, y_pred)
     
     # Display evaluation metrics and model information
     st.write(f'Model selected: {model_choice}')
