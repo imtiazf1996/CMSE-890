@@ -178,9 +178,12 @@ if st.button('Train and Evaluate Model'):
     st.pyplot(plt)
     if model_choice == 'Random Forest':
         importances = model.named_steps['regressor'].feature_importances_
-        # Adapt below if preprocessing changes feature names
-        feature_names = preprocessor.transformers_[0][-1] + list(preprocessor.named_transformers_['cat'].get_feature_names())
-        forest_importances = pd.Series(importances, index=feature_names)
+        
+        # Getting feature names correctly from ColumnTransformer
+        feature_names = preprocessor.named_transformers_['cat'].get_feature_names_out(input_features=categorical_features)
+        all_feature_names = numerical_features + list(feature_names)
+        
+        forest_importances = pd.Series(importances, index=all_feature_names)
         fig, ax = plt.subplots()
         forest_importances.plot.bar(ax=ax)
         ax.set_title("Feature importances")
