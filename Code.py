@@ -214,28 +214,27 @@ selected_make = st.selectbox('Select Make', options=unique_makes)
 
 # Model selection based on selected Make
 if selected_make:
-    input_data['Make'] = df[df['Make'] == selected_make]['Model'].unique()
-    input_data['Model'] = st.selectbox('Select Model', options=input_data['Make'])
+    unique_models = df[df['Make'] == selected_make]['Model'].unique()
+    selected_model = st.selectbox('Select Model', options=unique_models)
+    input_data['Make'] = selected_make  # Store the selected make
+    input_data['Model'] = selected_model  # Store the selected model
 
 # Mileage input
 input_data['Mileage'] = st.number_input('Enter Mileage', min_value=0, max_value=400000, value=50000, step=1000)
 
-expected_columns = ['Year', 'Mileage', 'Make', 'Model']  # Add all expected columns
-input_df = input_data.reindex(columns=expected_columns)
-    
-input_df.fillna(method='ffill', inplace=True)
+# Specify the expected columns in the order they are expected
+expected_columns = ['Year', 'Mileage', 'Make', 'Model']
 
-# Button to make prediction
+# Create a DataFrame from input_data
+input_df = pd.DataFrame([input_data], columns=expected_columns)
+
+
+# Predict Price button
 if st.button('Predict Price'):
     if st.session_state.get('model_trained', False):
-        model = st.session_state.model  # This should include the fitted 'preprocessor'
-        # Now use 'model' to predict since it contains the fitted 'preprocessor'
-        prediction = model.predict(input_df)  # This uses the entire pipeline, ensuring preprocessing is applied
+        model = st.session_state.model  # Ensure this model includes the preprocessor
+        # Predict using the model
+        prediction = model.predict(input_df)  # input_df is now correctly structured for prediction
         st.write(f"Predicted Price: ${prediction[0]:,.2f}")
     else:
         st.error("Please train the model before predicting.")
-    # Ensure the input data matches the expected feature order and types
-    input_df = pd.DataFrame([input_data])
-    input_preprocessed = preprocessor.transform(input_df)
-    prediction = st.session_state.model.predict(input_preprocessed)
-    st.write(f"Predicted Price: ${prediction[0]:,.2f}")
