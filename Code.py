@@ -21,7 +21,7 @@ if 'model_trained' not in st.session_state:
     st.session_state.model = None
 
 # Function to load and preprocess the dataset
-@st.experimental_memo
+@st.cache_data
 def load_data(filepath):
     df = pd.read_csv(filepath, encoding='ISO-8859-1')
     # Remove rows where 'price' or 'mileage' is zero or missing
