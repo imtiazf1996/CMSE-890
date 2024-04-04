@@ -168,8 +168,6 @@ if st.button('Train and Evaluate Model'):
     adj_r2 = 1 - (1 - r2) * (n - 1) / (n - p - 1)
     med_ae = median_absolute_error(y_test, y_pred)
 
-
-    
     # Display evaluation metrics and model information
     st.write(f'Model selected: {model_choice}')
     st.write(f'MSE (Mean Squared Error): {mse:.3f}')
@@ -211,14 +209,6 @@ if st.button('Train and Evaluate Model'):
     ax.set_xlabel('Residuals')
     ax.set_ylabel('Frequency')
     st.pyplot(fig)
-
-    plt.figure(figsize=(10, 6))
-    sns.scatterplot(x=y_test, y=y_pred)
-    plt.xlabel('Actual Prices')
-    plt.ylabel('Predicted Prices')
-    plt.title('Actual Prices vs Predicted Prices')
-    plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', linestyle='--')  # Diagonal line for reference
-    st.pyplot(plt)
     
     if model_choice == 'Random Forest':
     # Feature importance plot
