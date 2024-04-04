@@ -166,8 +166,13 @@ if st.button('Train and Evaluate Model'):
     n = X_test.shape[0]  # number of observations
     p = X_test.shape[1]  # number of predictors
     adj_r2 = 1 - (1 - r2) * (n - 1) / (n - p - 1)
-    msle = mean_squared_log_error(y_test, y_pred)
     med_ae = median_absolute_error(y_test, y_pred)
+    if (y_pred >= 0).all() and (y_test >= 0).all():
+        msle = mean_squared_log_error(y_test, y_pred)
+        st.write(f"Mean Squared Log Error (MSLE): {msle:.3f}")
+    else:
+        st.write("MSLE cannot be computed as predictions contain negative values.")
+
 
 
     
