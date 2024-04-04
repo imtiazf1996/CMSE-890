@@ -167,12 +167,6 @@ if st.button('Train and Evaluate Model'):
     p = X_test.shape[1]  # number of predictors
     adj_r2 = 1 - (1 - r2) * (n - 1) / (n - p - 1)
     med_ae = median_absolute_error(y_test, y_pred)
-    if (y_pred >= 0).all() and (y_test >= 0).all():
-        msle = mean_squared_log_error(y_test, y_pred)
-        st.write(f"Mean Squared Log Error (MSLE): {msle:.3f}")
-    else:
-        st.write("MSLE cannot be computed as predictions contain negative values.")
-
 
 
     
@@ -183,7 +177,6 @@ if st.button('Train and Evaluate Model'):
     st.write(f'MAE (Mean Absolute Error): {mae:.3f}')
     st.write(f'R² score: {r2:.3f}')
     st.write(f'Adjusted R² score: {adj_r2:.3f}')
-    st.write(f'MSLE (Mean Squared Logarithmic Error): {msle:.3f}')
     st.write(f'Median AE (Median Absolute Error): {med_ae:.3f}')
         
     # Save the trained model in session state
@@ -228,17 +221,16 @@ if st.button('Train and Evaluate Model'):
     st.pyplot(plt)
     
     if model_choice == 'Random Forest':
+    # Feature importance plot
         importances = model.named_steps['regressor'].feature_importances_
-        
-        # Getting feature names correctly from ColumnTransformer
-        feature_names = preprocessor.named_transformers_['cat'].get_feature_names_out(input_features=categorical_features)
-        all_feature_names = numerical_features + list(feature_names)
-        
-        forest_importances = pd.Series(importances, index=all_feature_names)
+    # Correctly get feature names for categorical variables
+        feature_names = numerical_features + \
+            list(preprocessor.named_transformers_['cat'].onehot.get_feature_names(categorical_features))
+        forest_importances = pd.Series(importances, index=feature_names)
         fig, ax = plt.subplots()
         forest_importances.plot.bar(ax=ax)
-        ax.set_title("Feature importances")
-        ax.set_ylabel("Mean decrease in impurity")
+        ax.set_title("Feature importances based on mean decrease in impurity")
+        ax.set_ylabel("Importance")
         st.pyplot(fig)
 
 # Adjust the 'Predict New Data' section to meet your requirements
