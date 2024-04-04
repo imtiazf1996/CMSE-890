@@ -11,7 +11,7 @@ from sklearn.linear_model import LinearRegression, Ridge
 from sklearn.neural_network import MLPRegressor
 from sklearn.svm import SVR
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_squared_error, r2_score, mean_squared_error
+from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error, mean_squared_log_error, median_absolute_error
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -159,17 +159,61 @@ if st.button('Train and Evaluate Model'):
     
     # car predictions and evaluate
     y_pred = model.predict(X_test)
-    r2 = mean_squared_error(y_test, y_pred)**0.5
+    mse = mean_squared_error(y_test, y_pred)**0.5
+    rmse = mean_squared_error(y_test, y_pred, squared=False)
+    mae = mean_absolute_error(y_test, y_pred)
+    r2 = r2_score(y_test, y_pred)
+    n = X_test.shape[0]  # number of observations
+    p = X_test.shape[1]  # number of predictors
+    adj_r2 = 1 - (1 - r2) * (n - 1) / (n - p - 1)
+    msle = mean_squared_log_error(y_test, y_pred)
+    med_ae = median_absolute_error(y_test, y_pred)
+
+
     
     # Display evaluation metrics and model information
     st.write(f'Model selected: {model_choice}')
+    st.write(f'MSE (Mean Squared Error): {mse:.3f}')
+    st.write(f'RMSE (Root Mean Squared Error): {rmse:.3f}')
+    st.write(f'MAE (Mean Absolute Error): {mae:.3f}')
     st.write(f'R² score: {r2:.3f}')
-    
+    st.write(f'Adjusted R² score: {adj_r2:.3f}')
+    st.write(f'MSLE (Mean Squared Logarithmic Error): {msle:.3f}')
+    st.write(f'Median AE (Median Absolute Error): {med_ae:.3f}')
+        
     # Save the trained model in session state
     st.session_state.model_trained = True
     st.session_state.model = model
     
     # Plotting actual vs predicted prices for evaluation
+    st.header("Model Evaluation Visualizations")
+
+    st.subheader("Actual vs. Predicted Prices")
+    fig, ax = plt.subplots()
+    sns.scatterplot(x=y_test, y=y_pred, ax=ax)
+    ax.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--', lw=3)
+    ax.set_xlabel('Actual Prices')
+    ax.set_ylabel('Predicted Prices')
+    st.pyplot(fig)
+    
+    # Visualization: Residual Plot
+    st.subheader("Residuals vs. Actual Prices")
+    residuals = y_test - y_pred
+    fig, ax = plt.subplots()
+    sns.scatterplot(x=y_test, y=residuals, ax=ax)
+    ax.axhline(y=0, color='red', linestyle='--')
+    ax.set_xlabel('Actual Prices')
+    ax.set_ylabel('Residuals')
+    st.pyplot(fig)
+    
+    # Visualization: Distribution of Residuals
+    st.subheader("Distribution of Residuals")
+    fig, ax = plt.subplots()
+    sns.histplot(residuals, kde=True, ax=ax)
+    ax.set_xlabel('Residuals')
+    ax.set_ylabel('Frequency')
+    st.pyplot(fig)
+
     plt.figure(figsize=(10, 6))
     sns.scatterplot(x=y_test, y=y_pred)
     plt.xlabel('Actual Prices')
@@ -177,6 +221,7 @@ if st.button('Train and Evaluate Model'):
     plt.title('Actual Prices vs Predicted Prices')
     plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', linestyle='--')  # Diagonal line for reference
     st.pyplot(plt)
+    
     if model_choice == 'Random Forest':
         importances = model.named_steps['regressor'].feature_importances_
         
