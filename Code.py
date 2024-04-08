@@ -117,8 +117,11 @@ model_choice = st.selectbox(
 
 # Display model-specific hyperparameter options
 if model_choice == 'Neural Network (MLPRegressor)':
-    layer_sizes = st.text_input('Enter hidden layer sizes (e.g., 100,50)', '100,50')
-    max_iter = st.slider('Max iterations', min_value=100, max_value=1000, value=500, step=50)
+    layer_sizes = st.text_input('Enter hidden layer sizes (e.g., 100,50)', '100')
+    max_iter = st.slider('Max iterations', min_value=100, max_value=1000, value=666, step=50)
+    alpha = st.text_input('Enter alpha (e.g., 0.001)', '0.001006064345328208')
+    learning_rate_init = st.text_input('Enter learning rate init (e.g., 0.003)', '0.0029967378215835973')
+
 
 elif model_choice == 'Random Forest':
     n_estimators = st.slider('Number of trees', min_value=10, max_value=300, value=100, step=10)
