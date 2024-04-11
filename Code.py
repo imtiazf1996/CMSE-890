@@ -266,7 +266,7 @@ def find_similar_cars(input_data, model, df, num_results=5):
 
     # Get top 5 similar priced cars
     similar_cars = df.sort_values('price_diff').head(num_results)
-    return similar_cars[['Make', 'Model', 'Mileage', 'pricesold']]
+    return similar_cars[['Make', 'Model','Year', 'Mileage', 'pricesold']]
 
 # After predicting the price, call the find_similar_cars function
 if st.button('Predict Price'):
