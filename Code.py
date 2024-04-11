@@ -267,6 +267,9 @@ def find_similar_cars(input_data, model, df, num_results=5):
     # Get top 5 similar priced cars
     similar_cars = df.sort_values('price_diff').head(num_results)
     return similar_cars[['Make', 'Model','Year', 'Mileage', 'pricesold']]
+def predict_future_prices(current_price, years=5, depreciation_rate=0.08):
+    future_prices = [(current_price * ((1 - depreciation_rate) ** year)) for year in range(1, years + 1)]
+    return future_prices
 
 # After predicting the price, call the find_similar_cars function
 if st.button('Predict Price'):
