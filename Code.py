@@ -253,7 +253,7 @@ input_data['Mileage'] = st.number_input('Enter Mileage', min_value=0, max_value=
 expected_columns = ['Year', 'Mileage', 'Make', 'Model']
 
 # Create a DataFrame from input_data
-input_df = pd.DataFrame([input_data], columns=expected_columns
+input_df = pd.DataFrame([input_data], columns=expected_columns)
 
 
 def find_similar_cars(input_data, model, df, num_results=5):
