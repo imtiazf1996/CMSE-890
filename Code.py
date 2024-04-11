@@ -275,6 +275,10 @@ if st.button('Predict Price'):
         prediction = model.predict(input_df)
         st.write(f"Predicted Price: ${prediction[0]:,.2f}")
 
+        future_prices = predict_future_prices(prediction[0])
+        st.write("Projected price trend for the next 5 years:")
+        st.line_chart(future_prices)
+
         # Display similar cars
         similar_cars_df = find_similar_cars(input_data, model, df)
         st.write("Similar cars based on price:")
