@@ -253,18 +253,7 @@ input_data['Mileage'] = st.number_input('Enter Mileage', min_value=0, max_value=
 expected_columns = ['Year', 'Mileage', 'Make', 'Model']
 
 # Create a DataFrame from input_data
-input_df = pd.DataFrame([input_data], columns=expected_columns)
-
-
-# Predict Price button
-if st.button('Predict Price'):
-    if st.session_state.get('model_trained', False):
-        model = st.session_state.model  # Ensure this model includes the preprocessor
-        # Predict using the model
-        prediction = model.predict(input_df)  # input_df is now correctly structured for prediction
-        st.write(f"Predicted Price: ${prediction[0]:,.2f}")
-    else:
-        st.error("Please train the model before predicting.")
+input_df = pd.DataFrame([input_data], columns=expected_columns
 
 
 def find_similar_cars(input_data, model, df, num_results=5):
