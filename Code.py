@@ -265,3 +265,30 @@ if st.button('Predict Price'):
         st.write(f"Predicted Price: ${prediction[0]:,.2f}")
     else:
         st.error("Please train the model before predicting.")
+
+
+def find_similar_cars(input_data, model, df, num_results=5):
+    # Convert input data to DataFrame for prediction
+    input_df = pd.DataFrame([input_data])
+    predicted_price = model.predict(input_df)[0]
+
+    # Calculate absolute difference from the predicted price
+    df['price_diff'] = abs(df['pricesold'] - predicted_price)
+
+    # Get top 5 similar priced cars
+    similar_cars = df.sort_values('price_diff').head(num_results)
+    return similar_cars[['Make', 'Model', 'Mileage', 'pricesold']]
+
+# After predicting the price, call the find_similar_cars function
+if st.button('Predict Price'):
+    if st.session_state.get('model_trained', False):
+        model = st.session_state.model
+        prediction = model.predict(input_df)
+        st.write(f"Predicted Price: ${prediction[0]:,.2f}")
+
+        # Display similar cars
+        similar_cars_df = find_similar_cars(input_data, model, df)
+        st.write("Similar cars based on price:")
+        st.dataframe(similar_cars_df)
+    else:
+        st.error("Please train the model before predicting.")
