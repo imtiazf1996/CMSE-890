@@ -125,7 +125,7 @@ if model_choice == 'Neural Network (MLPRegressor)':
 
 elif model_choice == 'Random Forest':
     n_estimators = st.slider('Number of trees', min_value=10, max_value=300, value=100, step=10)
-    max_depth = st.slider('Maximum depth of the trees', min_value=1, max_value=50, value=5, step=1)
+    max_depth = st.slider('Maximum depth of the trees', min_value=1, max_value=150, value=5, step=1)
 
 elif model_choice == 'Support Vector Machine (SVR)':
     C = st.slider('C (Regularization parameter)', min_value=0.01, max_value=100.0, value=1.0, step=0.01)
