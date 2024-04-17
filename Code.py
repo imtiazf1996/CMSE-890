@@ -110,6 +110,8 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 # Model Selection Interface
 st.header('Model Selection and Training')
+
+# Model choice dropdown
 model_choice = st.selectbox(
     'Select a machine learning model:',
     ['Neural Network (MLPRegressor)', 'Support Vector Machine (SVR)', 'Linear Regression', 'Random Forest']
@@ -122,14 +124,14 @@ if model_choice == 'Neural Network (MLPRegressor)':
     alpha = st.text_input('Enter alpha (e.g., 0.001)', '0.001006064345328208')
     learning_rate_init = st.text_input('Enter learning rate init (e.g., 0.003)', '0.0029967378215835973')
 
-
 elif model_choice == 'Random Forest':
     best_params = {
-    'max_depth': 100,
-    'min_samples_leaf': 1,
-    'min_samples_split': 10,
-    'n_estimators': 250
+        'max_depth': 100,
+        'min_samples_leaf': 1,
+        'min_samples_split': 10,
+        'n_estimators': 250
     }
+    preprocessor = StandardScaler()  # Assuming you have a preprocessor defined elsewhere
     model = Pipeline(steps=[
         ('preprocessor', preprocessor),
         ('regressor', RandomForestRegressor(
@@ -137,8 +139,9 @@ elif model_choice == 'Random Forest':
             max_depth=best_params['max_depth'],
             min_samples_split=best_params['min_samples_split'],
             min_samples_leaf=best_params['min_samples_leaf'],
-            random_state=42))]
-        
+            random_state=42))
+    ])
+
 elif model_choice == 'Support Vector Machine (SVR)':
     C = st.slider('C (Regularization parameter)', min_value=0.01, max_value=100.0, value=1.0, step=0.01)
     kernel = st.selectbox('Kernel', ['linear', 'poly', 'rbf', 'sigmoid'])
