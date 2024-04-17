@@ -138,6 +138,7 @@ elif model_choice == 'Random Forest':
             min_samples_split=best_params['min_samples_split'],
             min_samples_leaf=best_params['min_samples_leaf'],
             random_state=42))
+        
 elif model_choice == 'Support Vector Machine (SVR)':
     C = st.slider('C (Regularization parameter)', min_value=0.01, max_value=100.0, value=1.0, step=0.01)
     kernel = st.selectbox('Kernel', ['linear', 'poly', 'rbf', 'sigmoid'])
