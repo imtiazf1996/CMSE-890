@@ -14,8 +14,6 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error, mean_squared_log_error, median_absolute_error
 import matplotlib.pyplot as plt
 import seaborn as sns
-import joblib
-
 
 # Initialize session state
 if 'model_trained' not in st.session_state:
@@ -111,18 +109,6 @@ preprocessor, X, y, features, numerical_features,categorical_features = preproce
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Model Selection Interface
-default_model_file = 'default_mlp_model.joblib'
-if 'model' not in st.session_state or not st.session_state.model_trained:
-    if st.file_uploader("Load a pre-trained model"):
-        # Load pre-trained model if available
-        st.session_state.model = joblib.load(st.file_uploader("Load file"))
-    else:
-        # Train default model
-        default_model = MLPRegressor(hidden_layer_sizes=(100, 50), max_iter=500, learning_rate_init=0.001, alpha=0.0001, random_state=42)
-        st.session_state.model = Pipeline(steps=[('preprocessor', preprocessor), ('regressor', default_model)])
-        st.session_state.model.fit(X_train, y_train)
-        st.session_state.model_trained = True
-        joblib.dump(st.session_state.model, default_model_file)  # Save the trained model
 
 st.title("Model Training Interface")
 
