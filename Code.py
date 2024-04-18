@@ -116,7 +116,7 @@ st.title("Model Training Interface")
 # Model choice dropdown
 model_choice = st.selectbox(
     'Select a machine learning model:',
-    ['Neural Network (MLPRegressor)']
+    ['Neural Network (MLPRegressor)', 'Random Forest', 'Support Vector Machine (SVR)','Linear Regression' ]
 )
 
 # Display model-specific hyperparameter options
