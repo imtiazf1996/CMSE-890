@@ -23,10 +23,10 @@ st.markdown("""
 st.markdown("""
 ### Welcome to the Used Car Price Prediction App
 
-This interactive application is designed to predict used car prices based on various inputs such as the car's make, model, year, and mileage. It's a part of the **CMSE 890** machine learning project by **Fawaz Imtiaz**. You can use this tool to explore different machine learning models to understand how they predict prices and compare their performance.
+This interactive application is designed to predict used car prices based on various inputs such as the car's make, model, year, and mileage. It's a part of the **CMSE 890** machine learning project by **Fawaz Imtiaz**. You can use this tool to explore different machine learning models to understand how they predict prices and compare their performance.""")
 
 with st.expander("How To use"):
-    #### How to Use:
+    st.markdown("""#### How to Use:
     1. **Explore the Dataset**: Start by exploring the dataset through various plots available under the 'Used Car Price Prediction - EDA' section. You can view distributions and relationships in the data which might help you understand the factors affecting car prices.
     2. **Select a Model for Training**: Navigate to the 'Model Training Interface' section to choose and configure the machine learning model you want to test.
     3. **Train the Model**: After selecting a model and its parameters, click on 'Train and Evaluate Model' to train your model on the dataset and view performance metrics.
