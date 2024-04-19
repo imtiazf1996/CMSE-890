@@ -15,6 +15,32 @@ from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error, m
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+st.markdown("""
+# Used Car Price Prediction Tool
+## A Machine Learning Project for CMSE 890
+## Created by Fawaz Imtiaz
+""")
+st.markdown("""
+### Welcome to the Used Car Price Prediction App
+
+This interactive application is designed to predict used car prices based on various inputs such as the car's make, model, year, and mileage. It's a part of the **CMSE 890** machine learning project by **Fawaz Imtiaz**. You can use this tool to explore different machine learning models to understand how they predict prices and compare their performance.
+
+#### How to Use:
+1. **Explore the Dataset**: Start by exploring the dataset through various plots available under the 'Used Car Price Prediction - EDA' section. You can view distributions and relationships in the data which might help you understand the factors affecting car prices.
+2. **Select a Model for Training**: Navigate to the 'Model Training Interface' section to choose and configure the machine learning model you want to test.
+3. **Train the Model**: After selecting a model and its parameters, click on 'Train and Evaluate Model' to train your model on the dataset and view performance metrics.
+4. **Make Predictions**: Once a model is trained, you can make price predictions for a new car entry in the 'Predict New Car Prices' section.
+5. **Compare Predictions**: View similar cars from the dataset based on the predicted price to gauge how well the model is performing.
+""")
+
+# Collapsible Important Information section
+with st.expander("IMPORTANT INFORMATION"):
+    st.markdown("""
+    - Models like Neural Networks (MLPRegressor), Random Forest, and Support Vector Machine (SVR) require significant computation time to train. If you are just testing the functionality of the website or are limited on time, consider using the **Linear Regression** model, which requires less time to train.
+    - For further details about the underlying code and methodologies used, please refer to the accompanying Jupyter Notebook file.
+    """)
+
+st.write("Enjoy exploring and testing different machine learning models to gain insights into used car pricing!")
 # Initialize session state
 if 'model_trained' not in st.session_state:
     st.session_state.model_trained = False
